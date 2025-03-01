@@ -35,7 +35,7 @@ const Index = () => {
 
   return (
     <HNLayout>
-      <h1 className="text-xl font-semibold mb-4">Top Stories</h1>
+      <h1 className="text-xl font-semibold mb-4">Faker News</h1>
       
       {loading ? (
         <div className="space-y-4">

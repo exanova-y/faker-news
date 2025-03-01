@@ -15,7 +15,7 @@ const HNLayout = ({ children }: HNLayoutProps) => {
         <div className="hn-container animate-in">{children}</div>
       </main>
       <footer className="py-6 text-center text-xs text-hn-subtext">
-        <p>Hacker News Clone — Built with Lovable</p>
+        <p>Faker News — Built with Lovable</p>
       </footer>
       <Toaster />
     </div>
