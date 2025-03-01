@@ -9,6 +9,7 @@ export interface Story {
   descendants: number;
   kids?: number[];
   buzzwordScore?: number;
+  debateThread?: boolean;
 }
 
 export interface Comment {

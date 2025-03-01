@@ -1,4 +1,3 @@
-
 import { Story, Comment } from "@/types";
 
 // List of tech buzzwords to detect in titles
@@ -9,7 +8,8 @@ const buzzwords = [
   "framework", "stack", "API", "automation", "performance", "UX", "UI",
   "responsive", "reactive", "native", "paradigm", "algorithm", "neural",
   "deep learning", "data", "analytics", "dashboard", "metrics", "vision", 
-  "future", "innovation", "disruption", "transform", "revolution"
+  "future", "innovation", "disruption", "transform", "revolution",
+  "inference", "compute", "latency", "throughput", "GPUs", "TPUs", "ASICs"
 ];
 
 // List of realistic tech usernames
@@ -22,72 +22,59 @@ const techUsernames = [
   "windowsdev", "quantumcoder", "embeddedhacker", "10xdeveloper", "scriptkiddie",
   "bytecoder", "pixelpusher", "uiartist", "algorithmace", "memoryleaker",
   "bugfixer", "featureadder", "scalability_guru", "techpurge", "startupfounder",
-  "venturecapitalist", "techlead", "productowner", "scrummaster", "agilecoach"
+  "venturecapitalist", "techlead", "productowner", "scrummaster", "agilecoach",
+  "mlresearcher", "gpumaniac", "asicminer", "quantumtheorist", "aiethicist"
 ];
 
-// Sample comment templates
-const commentTemplates = [
-  "This is absolutely groundbreaking. I've been waiting for someone to tackle this issue.",
-  "I'm not convinced this approach will scale in production environments.",
-  "Has anyone actually benchmarked this against existing solutions?",
-  "The article misses several important points about {topic}.",
-  "I've implemented something similar at my company and ran into several challenges.",
-  "Great write-up, but I think the security implications need more attention.",
-  "This reminds me of a project from the early 2000s that tried to solve the same problem.",
-  "The author clearly hasn't worked with enterprise systems at scale.",
-  "I'd love to see some actual performance metrics on this.",
-  "This is exactly why I switched from {tech1} to {tech2} last year.",
-  "The comments here are missing the point entirely.",
-  "As someone who's worked in this field for 15+ years, I can confirm this is revolutionary.",
-  "Interesting approach, but I wonder about backward compatibility.",
-  "Does anyone have a link to the original research this is based on?",
-  "I'm surprised no one has mentioned the regulatory implications of this.",
-  "The problem isn't the technology, it's the implementation.",
-  "I've contributed to an open-source project that addresses this exact issue.",
-  "Can we please stop pretending that every new framework is going to change the world?",
-  "I've been saying this for years, glad to see someone finally wrote it up properly.",
-  "This is why I love the tech community - always pushing boundaries."
+// Inference debate specific comments
+const inferenceDebateComments = [
+  "Edge computing is the only viable approach for real-time inference. Waiting for API calls to centralized servers will never be good enough for mission-critical applications.",
+  "The entire AI industry is blindly worshipping at the altar of GPU acceleration without questioning if these power-hungry monsters are actually needed for most use cases.",
+  "I've been running inference on consumer hardware for years. The cloud providers have convinced everyone they need specialized hardware when reality is much different.",
+  "Anyone claiming you can do high-quality real-time inference on a phone is selling snake oil. The physics simply don't work out for the compute requirements.",
+  "The latency-accuracy tradeoff is universally misunderstood. 90% of companies would be better off with a simpler model that runs 10x faster.",
+  "Our team switched from cloud inference to local and saved $2.3M annually. The obsession with running everything in the cloud is financially irresponsible.",
+  "Quantization is not a silver bullet! I'm tired of seeing papers claim 'minimal accuracy loss' when real-world performance drops by double digits.",
+  "Inference providers are charging 100x the actual compute cost and nobody is calling them out on this highway robbery.",
+  "Most of the 'innovation' in model compression is just rehashing techniques from the 1990s with fancier marketing.",
+  "The environmental impact of these massive GPU farms for inference is indefensible. We're burning the planet to run chatbots.",
+  "Apple's ML hardware strategy proves that custom silicon, not general-purpose GPUs, is the future of efficient inference.",
+  "I've benchmarked every major cloud inference provider, and the performance variability is shocking. You're paying premium prices for inconsistent service.",
+  "The real bottleneck for most inference workloads isn't compute - it's memory bandwidth. The industry is optimizing for the wrong thing.",
+  "Anyone claiming their API has 'human-level response times' is either lying or has a very generous definition of human response time.",
+  "We need to stop pretending that open-source models running locally can compete with proprietary cloud models. The performance gap is enormous and growing.",
+  "The opposite is true - open source models on consumer hardware are already outperforming cloud APIs from last year, and the gap is narrowing rapidly.",
+  "If you're not running ONNX for production inference, you're leaving 40% performance on the table. TensorFlow and PyTorch are research frameworks, not production tools.",
+  "ONNX is just another abstraction layer that adds complexity without solving the fundamental issues in deployment.",
+  "TPUs are the most overrated hardware in AI. Unless you're Google, their real-world performance advantages rarely justify the development overhead.",
+  "The companies achieving actual real-time inference at scale aren't writing Medium articles about it - they're filing patents and keeping their methods secret."
 ];
 
-// Tech topics for comment generation
-const techTopics = [
-  "serverless architecture", "microservices", "Kubernetes", "Docker", 
-  "cloud computing", "machine learning", "React", "Vue", "Angular",
-  "TypeScript", "JavaScript", "Python", "Rust", "Go", "Java",
-  "functional programming", "concurrency", "DevOps", "CI/CD pipelines",
-  "testing", "security", "databases", "SQL", "NoSQL", "MongoDB",
-  "PostgreSQL", "Redis", "performance optimization", "algorithms",
-  "data structures", "system design", "web development", "mobile development",
-  "cross-platform frameworks", "native development", "cloud providers",
-  "AWS", "Azure", "GCP", "infrastructure as code", "Terraform", "Ansible"
+// Topic-specific follow-up comments for the inference debate
+const inferenceFollowupComments = [
+  "That's a classic cloud provider talking point. Have you actually measured the TCO including bandwidth costs, API fees, and engineering time?",
+  "This perspective reeks of academic thinking with no real-world deployment experience. Try maintaining that position when serving millions of requests per day.",
+  "I implemented exactly what you're suggesting at my previous company and it was a disaster. Latency spikes during peak hours made the product unusable.",
+  "Your benchmarks must be using toy models. With any production-scale transformer, the numbers don't support that conclusion at all.",
+  "This completely ignores the security implications. Running inference in untrusted environments introduces vulnerabilities no amount of performance can justify.",
+  "The hardware landscape is changing so rapidly that any architecture decisions based on today's benchmarks will be obsolete in 6 months.",
+  "What people miss in this debate is that most business use cases don't need sub-100ms inference. They need reliability and consistent pricing.",
+  "Have you actually looked at the latest NVIDIA H100 benchmarks? The performance per watt improvement is making all these distributed approaches irrelevant.",
+  "The mobile hardware advocates always conveniently ignore how much pre-processing and model pruning they had to do to make their demos work.",
+  "You're optimizing for the wrong metric. User experience should drive these decisions, not theoretical throughput numbers on synthetic benchmarks."
 ];
 
-// Tech comparisons for the template
-const techComparisons = [
-  ["MongoDB", "PostgreSQL"],
-  ["React", "Vue"],
-  ["JavaScript", "TypeScript"],
-  ["Python", "Go"],
-  ["AWS", "GCP"],
-  ["Docker", "Podman"],
-  ["REST", "GraphQL"],
-  ["Redux", "Context API"],
-  ["Angular", "React"],
-  ["Node.js", "Deno"],
-  ["npm", "yarn"],
-  ["Jenkins", "GitHub Actions"],
-  ["Kubernetes", "Docker Swarm"],
-  ["MySQL", "PostgreSQL"],
-  ["Linux", "Windows"],
-  ["CSS", "Sass"],
-  ["Express", "Fastify"],
-  ["Webpack", "Vite"],
-  ["PHP", "Node.js"],
-  ["Apache", "Nginx"]
-];
+// Create an inference debate article as the first story
+const inferenceDebateStory = {
+  title: "The Great Inference Debate: Cloud vs. Edge vs. On-Device Compute",
+  url: "https://aifuture.tech/inference-compute-debate",
+  domain: "aifuture.tech",
+  debateThread: true  // Mark this as our special debate thread
+};
 
 // Realistic tech news stories
 const techStories = [
+  inferenceDebateStory,  // Add our debate story as the first one
   {
     title: "The Hidden Cost of Serverless: When Abstractions Leak Money",
     url: "https://cloudeconomics.dev/serverless-cost-leaks",
@@ -273,6 +260,76 @@ const generateCommentText = (): string => {
   return template;
 };
 
+// Sample comment templates
+const commentTemplates = [
+  "This is absolutely groundbreaking. I've been waiting for someone to tackle this issue.",
+  "I'm not convinced this approach will scale in production environments.",
+  "Has anyone actually benchmarked this against existing solutions?",
+  "The article misses several important points about {topic}.",
+  "I've implemented something similar at my company and ran into several challenges.",
+  "Great write-up, but I think the security implications need more attention.",
+  "This reminds me of a project from the early 2000s that tried to solve the same problem.",
+  "The author clearly hasn't worked with enterprise systems at scale.",
+  "I'd love to see some actual performance metrics on this.",
+  "This is exactly why I switched from {tech1} to {tech2} last year.",
+  "The comments here are missing the point entirely.",
+  "As someone who's worked in this field for 15+ years, I can confirm this is revolutionary.",
+  "Interesting approach, but I wonder about backward compatibility.",
+  "Does anyone have a link to the original research this is based on?",
+  "I'm surprised no one has mentioned the regulatory implications of this.",
+  "The problem isn't the technology, it's the implementation.",
+  "I've contributed to an open-source project that addresses this exact issue.",
+  "Can we please stop pretending that every new framework is going to change the world?",
+  "I've been saying this for years, glad to see someone finally wrote it up properly.",
+  "This is why I love the tech community - always pushing boundaries."
+];
+
+// Tech topics for comment generation
+const techTopics = [
+  "serverless architecture", "microservices", "Kubernetes", "Docker", 
+  "cloud computing", "machine learning", "React", "Vue", "Angular",
+  "TypeScript", "JavaScript", "Python", "Rust", "Go", "Java",
+  "functional programming", "concurrency", "DevOps", "CI/CD pipelines",
+  "testing", "security", "databases", "SQL", "NoSQL", "MongoDB",
+  "PostgreSQL", "Redis", "performance optimization", "algorithms",
+  "data structures", "system design", "web development", "mobile development",
+  "cross-platform frameworks", "native development", "cloud providers",
+  "AWS", "Azure", "GCP", "infrastructure as code", "Terraform", "Ansible"
+];
+
+// Tech comparisons for the template
+const techComparisons = [
+  ["MongoDB", "PostgreSQL"],
+  ["React", "Vue"],
+  ["JavaScript", "TypeScript"],
+  ["Python", "Go"],
+  ["AWS", "GCP"],
+  ["Docker", "Podman"],
+  ["REST", "GraphQL"],
+  ["Redux", "Context API"],
+  ["Angular", "React"],
+  ["Node.js", "Deno"],
+  ["npm", "yarn"],
+  ["Jenkins", "GitHub Actions"],
+  ["Kubernetes", "Docker Swarm"],
+  ["MySQL", "PostgreSQL"],
+  ["Linux", "Windows"],
+  ["CSS", "Sass"],
+  ["Express", "Fastify"],
+  ["Webpack", "Vite"],
+  ["PHP", "Node.js"],
+  ["Apache", "Nginx"]
+];
+
+// Generate a comment for the inference debate thread
+const generateInferenceDebateComment = (isTopLevel: boolean): string => {
+  if (isTopLevel) {
+    return inferenceDebateComments[Math.floor(Math.random() * inferenceDebateComments.length)];
+  } else {
+    return inferenceFollowupComments[Math.floor(Math.random() * inferenceFollowupComments.length)];
+  }
+};
+
 // We'll simulate an API but later integrate with Claude API
 export const fetchTopStories = async (): Promise<Story[]> => {
   // Simulated delay
@@ -291,9 +348,9 @@ export const fetchTopStories = async (): Promise<Story[]> => {
       score: Math.floor(Math.random() * 500) + 10,
       time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
       by: username,
-      descendants: Math.floor(Math.random() * 100),
+      descendants: i === 0 ? 35 : Math.floor(Math.random() * 100), // More comments for our debate thread
       kids: Array.from(
-        { length: Math.floor(Math.random() * 10) + 1 },
+        { length: i === 0 ? 12 : Math.floor(Math.random() * 10) + 1 }, // More top-level comments for debate
         (_, j) => 1000 + i * 100 + j
       ),
       buzzwordScore,
@@ -309,6 +366,7 @@ export const fetchStory = async (id: number): Promise<Story> => {
   const storyInfo = techStories[storyIndex];
   const username = techUsernames[Math.floor(Math.random() * techUsernames.length)];
   const buzzwordScore = calculateBuzzwordScore(storyInfo.title);
+  const isDebateThread = storyIndex === 0; // Check if this is our inference debate thread
   
   return {
     id,
@@ -317,9 +375,9 @@ export const fetchStory = async (id: number): Promise<Story> => {
     score: Math.floor(Math.random() * 500) + 10,
     time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
     by: username,
-    descendants: Math.floor(Math.random() * 100),
+    descendants: isDebateThread ? 35 : Math.floor(Math.random() * 100),
     kids: Array.from(
-      { length: Math.floor(Math.random() * 20) + 5 },
+      { length: isDebateThread ? 12 : Math.floor(Math.random() * 20) + 5 },
       (_, j) => 1000 + id * 100 + j
     ),
     buzzwordScore,
@@ -330,9 +388,24 @@ export const fetchComments = async (ids: number[]): Promise<Comment[]> => {
   // Simulated delay
   await new Promise((resolve) => setTimeout(resolve, 700));
   
+  // Determine if these are comments for the inference debate thread
+  const isInferenceDebateThread = ids.some(id => id >= 1000 && id < 1100);
+  
   return ids.map((id) => {
     const username = techUsernames[Math.floor(Math.random() * techUsernames.length)];
-    const commentText = generateCommentText();
+    // Generate different comment text based on thread type
+    const commentText = isInferenceDebateThread 
+      ? generateInferenceDebateComment(id < 1100) // Top level comments have IDs 1000-1099
+      : generateCommentText();
+    
+    // For inference debate thread, add more nested comments to create deeper discussions
+    const hasChildren = isInferenceDebateThread 
+      ? Math.random() > 0.3 // 70% chance of having children in debate thread
+      : Math.random() > 0.7; // 30% chance in normal threads
+    
+    const childrenCount = isInferenceDebateThread 
+      ? Math.floor(Math.random() * 4) + 1 // 1-5 children for debate comments
+      : Math.floor(Math.random() * 3); // 0-3 children for normal comments
     
     return {
       id,
@@ -340,9 +413,9 @@ export const fetchComments = async (ids: number[]): Promise<Comment[]> => {
       time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
       by: username,
       parent: Math.floor(id / 100),
-      kids: Math.random() > 0.7
+      kids: hasChildren
         ? Array.from(
-            { length: Math.floor(Math.random() * 5) },
+            { length: childrenCount },
             (_, j) => id * 10 + j + 1
           )
         : undefined,
