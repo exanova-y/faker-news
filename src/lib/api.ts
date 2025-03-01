@@ -1,6 +1,91 @@
 
 import { Story, Comment } from "@/types";
 
+// List of tech buzzwords to detect in titles
+const buzzwords = [
+  "serverless", "cloud", "AI", "ML", "blockchain", "crypto", "web3", 
+  "microservices", "DevOps", "containers", "kubernetes", "docker", "GitOps", 
+  "NoSQL", "agile", "CI/CD", "MVP", "scale", "optimization", "architecture",
+  "framework", "stack", "API", "automation", "performance", "UX", "UI",
+  "responsive", "reactive", "native", "paradigm", "algorithm", "neural",
+  "deep learning", "data", "analytics", "dashboard", "metrics", "vision", 
+  "future", "innovation", "disruption", "transform", "revolution"
+];
+
+// List of realistic tech usernames
+const techUsernames = [
+  "devninja", "codesmith", "rustacean", "pythonista", "webwizard", 
+  "fullstackfan", "cloudguru", "datascientist", "securityhawk", "uxdesigner",
+  "sysadmin", "netarchitect", "dbmaster", "frontenddev", "backendpro",
+  "gitmaster", "dockerfan", "kubeguru", "aiengineer", "hackerman",
+  "terminalwarrior", "bitshifter", "jsmonkey", "linuxlover", "macfanboy",
+  "windowsdev", "quantumcoder", "embeddedhacker", "10xdeveloper", "scriptkiddie",
+  "bytecoder", "pixelpusher", "uiartist", "algorithmace", "memoryleaker",
+  "bugfixer", "featureadder", "scalability_guru", "techpurge", "startupfounder",
+  "venturecapitalist", "techlead", "productowner", "scrummaster", "agilecoach"
+];
+
+// Sample comment templates
+const commentTemplates = [
+  "This is absolutely groundbreaking. I've been waiting for someone to tackle this issue.",
+  "I'm not convinced this approach will scale in production environments.",
+  "Has anyone actually benchmarked this against existing solutions?",
+  "The article misses several important points about {topic}.",
+  "I've implemented something similar at my company and ran into several challenges.",
+  "Great write-up, but I think the security implications need more attention.",
+  "This reminds me of a project from the early 2000s that tried to solve the same problem.",
+  "The author clearly hasn't worked with enterprise systems at scale.",
+  "I'd love to see some actual performance metrics on this.",
+  "This is exactly why I switched from {tech1} to {tech2} last year.",
+  "The comments here are missing the point entirely.",
+  "As someone who's worked in this field for 15+ years, I can confirm this is revolutionary.",
+  "Interesting approach, but I wonder about backward compatibility.",
+  "Does anyone have a link to the original research this is based on?",
+  "I'm surprised no one has mentioned the regulatory implications of this.",
+  "The problem isn't the technology, it's the implementation.",
+  "I've contributed to an open-source project that addresses this exact issue.",
+  "Can we please stop pretending that every new framework is going to change the world?",
+  "I've been saying this for years, glad to see someone finally wrote it up properly.",
+  "This is why I love the tech community - always pushing boundaries."
+];
+
+// Tech topics for comment generation
+const techTopics = [
+  "serverless architecture", "microservices", "Kubernetes", "Docker", 
+  "cloud computing", "machine learning", "React", "Vue", "Angular",
+  "TypeScript", "JavaScript", "Python", "Rust", "Go", "Java",
+  "functional programming", "concurrency", "DevOps", "CI/CD pipelines",
+  "testing", "security", "databases", "SQL", "NoSQL", "MongoDB",
+  "PostgreSQL", "Redis", "performance optimization", "algorithms",
+  "data structures", "system design", "web development", "mobile development",
+  "cross-platform frameworks", "native development", "cloud providers",
+  "AWS", "Azure", "GCP", "infrastructure as code", "Terraform", "Ansible"
+];
+
+// Tech comparisons for the template
+const techComparisons = [
+  ["MongoDB", "PostgreSQL"],
+  ["React", "Vue"],
+  ["JavaScript", "TypeScript"],
+  ["Python", "Go"],
+  ["AWS", "GCP"],
+  ["Docker", "Podman"],
+  ["REST", "GraphQL"],
+  ["Redux", "Context API"],
+  ["Angular", "React"],
+  ["Node.js", "Deno"],
+  ["npm", "yarn"],
+  ["Jenkins", "GitHub Actions"],
+  ["Kubernetes", "Docker Swarm"],
+  ["MySQL", "PostgreSQL"],
+  ["Linux", "Windows"],
+  ["CSS", "Sass"],
+  ["Express", "Fastify"],
+  ["Webpack", "Vite"],
+  ["PHP", "Node.js"],
+  ["Apache", "Nginx"]
+];
+
 // Realistic tech news stories
 const techStories = [
   {
@@ -155,6 +240,39 @@ const techStories = [
   }
 ];
 
+// Calculate buzzword score for a title
+const calculateBuzzwordScore = (title: string): number => {
+  let score = 0;
+  const lowerTitle = title.toLowerCase();
+  
+  buzzwords.forEach(buzzword => {
+    if (lowerTitle.includes(buzzword.toLowerCase())) {
+      score += 1;
+    }
+  });
+  
+  return score;
+};
+
+// Generate realistic comment text
+const generateCommentText = (): string => {
+  let template = commentTemplates[Math.floor(Math.random() * commentTemplates.length)];
+  
+  // Replace {topic} placeholder if present
+  if (template.includes("{topic}")) {
+    const topic = techTopics[Math.floor(Math.random() * techTopics.length)];
+    template = template.replace("{topic}", topic);
+  }
+  
+  // Replace tech comparison placeholders if present
+  if (template.includes("{tech1}") && template.includes("{tech2}")) {
+    const comparison = techComparisons[Math.floor(Math.random() * techComparisons.length)];
+    template = template.replace("{tech1}", comparison[0]).replace("{tech2}", comparison[1]);
+  }
+  
+  return template;
+};
+
 // We'll simulate an API but later integrate with Claude API
 export const fetchTopStories = async (): Promise<Story[]> => {
   // Simulated delay
@@ -163,18 +281,22 @@ export const fetchTopStories = async (): Promise<Story[]> => {
   // Generate 30 simulated stories with our tech story titles
   return Array.from({ length: 30 }, (_, i) => {
     const storyInfo = techStories[i % techStories.length];
+    const username = techUsernames[Math.floor(Math.random() * techUsernames.length)];
+    const buzzwordScore = calculateBuzzwordScore(storyInfo.title);
+    
     return {
       id: i + 1,
       title: storyInfo.title,
       url: storyInfo.url,
       score: Math.floor(Math.random() * 500) + 10,
       time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
-      by: `user${Math.floor(Math.random() * 1000)}`,
+      by: username,
       descendants: Math.floor(Math.random() * 100),
       kids: Array.from(
         { length: Math.floor(Math.random() * 10) + 1 },
         (_, j) => 1000 + i * 100 + j
       ),
+      buzzwordScore,
     };
   });
 };
@@ -185,6 +307,8 @@ export const fetchStory = async (id: number): Promise<Story> => {
   
   const storyIndex = (id - 1) % techStories.length;
   const storyInfo = techStories[storyIndex];
+  const username = techUsernames[Math.floor(Math.random() * techUsernames.length)];
+  const buzzwordScore = calculateBuzzwordScore(storyInfo.title);
   
   return {
     id,
@@ -192,12 +316,13 @@ export const fetchStory = async (id: number): Promise<Story> => {
     url: storyInfo.url,
     score: Math.floor(Math.random() * 500) + 10,
     time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
-    by: `user${Math.floor(Math.random() * 1000)}`,
+    by: username,
     descendants: Math.floor(Math.random() * 100),
     kids: Array.from(
       { length: Math.floor(Math.random() * 20) + 5 },
       (_, j) => 1000 + id * 100 + j
     ),
+    buzzwordScore,
   };
 };
 
@@ -205,19 +330,24 @@ export const fetchComments = async (ids: number[]): Promise<Comment[]> => {
   // Simulated delay
   await new Promise((resolve) => setTimeout(resolve, 700));
   
-  return ids.map((id) => ({
-    id,
-    text: `This is a simulated comment #${id}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
-    time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
-    by: `user${Math.floor(Math.random() * 1000)}`,
-    parent: Math.floor(id / 100),
-    kids: Math.random() > 0.7
-      ? Array.from(
-          { length: Math.floor(Math.random() * 5) },
-          (_, j) => id * 10 + j + 1
-        )
-      : undefined,
-  }));
+  return ids.map((id) => {
+    const username = techUsernames[Math.floor(Math.random() * techUsernames.length)];
+    const commentText = generateCommentText();
+    
+    return {
+      id,
+      text: commentText,
+      time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
+      by: username,
+      parent: Math.floor(id / 100),
+      kids: Math.random() > 0.7
+        ? Array.from(
+            { length: Math.floor(Math.random() * 5) },
+            (_, j) => id * 10 + j + 1
+          )
+        : undefined,
+    };
+  });
 };
 
 // Function to get formatted time

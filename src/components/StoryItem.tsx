@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { Story } from "@/types";
 import { getTimeAgo } from "@/lib/api";
-import { ChevronUp, ExternalLink } from "lucide-react";
+import { ChevronUp, ExternalLink, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StoryItemProps {
@@ -13,8 +13,16 @@ interface StoryItemProps {
 const StoryItem = ({ story, rank }: StoryItemProps) => {
   const hostname = story.url ? new URL(story.url).hostname.replace('www.', '') : '';
 
+  // Function to get color based on buzzword score
+  const getBuzzwordColor = (score: number) => {
+    if (score >= 5) return "text-red-500";
+    if (score >= 3) return "text-orange-500";
+    if (score >= 1) return "text-yellow-500";
+    return "text-green-500";
+  };
+
   return (
-    <div className="hn-story-row flex gap-2 group">
+    <div className="hn-story-row flex gap-2 group py-2">
       {rank && (
         <div className="w-8 text-right text-hn-subtext flex-shrink-0 pt-0.5">
           {rank}.
@@ -62,6 +70,19 @@ const StoryItem = ({ story, rank }: StoryItemProps) => {
               >
                 {story.descendants || 0} comment{story.descendants !== 1 ? 's' : ''}
               </Link>
+              
+              {story.buzzwordScore !== undefined && (
+                <>
+                  <span className="mx-1">·</span>
+                  <span 
+                    className={`flex items-center ${getBuzzwordColor(story.buzzwordScore)}`}
+                    title="Buzzword Score"
+                  >
+                    <Zap className="h-3 w-3 mr-0.5" />
+                    {story.buzzwordScore}
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </div>

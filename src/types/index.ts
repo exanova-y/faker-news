@@ -8,6 +8,7 @@ export interface Story {
   by: string;
   descendants: number;
   kids?: number[];
+  buzzwordScore?: number;
 }
 
 export interface Comment {

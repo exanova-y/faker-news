@@ -15,7 +15,9 @@ const CommentItem = ({ comment, children, isChild = false }: CommentItemProps) =
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className={cn("comment-item", isChild && "ml-4 mt-3")}>
+    <div className={cn("comment-item border-l-4 pl-3 py-2", 
+      isChild ? "border-gray-200 ml-4 mt-3" : "border-gray-300")}
+    >
       <div className="flex items-center gap-2 text-xs text-hn-subtext">
         <button
           onClick={() => setCollapsed(!collapsed)}
@@ -38,14 +40,12 @@ const CommentItem = ({ comment, children, isChild = false }: CommentItemProps) =
         <>
           <div 
             className="text-hn-title text-sm mt-1 pl-6 pb-2"
-            dangerouslySetInnerHTML={{ __html: comment.text }}
-          />
+          >
+            {comment.text}
+          </div>
           
           {children && (
-            <div className={cn(
-              "comment-thread transition-all duration-200",
-              isChild ? "border-l-hn-divider/70" : "border-l-hn-divider"
-            )}>
+            <div className="mt-2">
               {children}
             </div>
           )}
