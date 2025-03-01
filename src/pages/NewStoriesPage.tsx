@@ -7,7 +7,7 @@ import HNLayout from "@/components/HNLayout";
 import StoryItem from "@/components/StoryItem";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Index = () => {
+const NewStoriesPage = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -16,13 +16,20 @@ const Index = () => {
     const loadStories = async () => {
       try {
         setLoading(true);
+        // We'll use the same API for now but in real app we'd have a different endpoint
         const fetchedStories = await fetchTopStories();
-        setStories(fetchedStories);
+        // Simulate newer stories by changing the timestamps
+        const newerStories = fetchedStories.map(story => ({
+          ...story,
+          time: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 3600), // Last hour
+          score: Math.floor(Math.random() * 50) + 1 // Lower scores for newer stories
+        }));
+        setStories(newerStories);
       } catch (error) {
-        console.error("Failed to fetch stories:", error);
+        console.error("Failed to fetch new stories:", error);
         toast({
           title: "Error",
-          description: "Failed to load stories. Please try again.",
+          description: "Failed to load new stories. Please try again.",
           variant: "destructive",
         });
       } finally {
@@ -35,7 +42,7 @@ const Index = () => {
 
   return (
     <HNLayout>
-      <h1 className="text-xl font-semibold mb-4">Top Stories</h1>
+      <h1 className="text-xl font-semibold mb-4">New Stories</h1>
       
       {loading ? (
         <div className="space-y-4">
@@ -60,4 +67,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default NewStoriesPage;

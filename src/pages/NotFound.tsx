@@ -1,5 +1,7 @@
-import { useLocation } from "react-router-dom";
+
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import HNLayout from "@/components/HNLayout";
 
 const NotFound = () => {
   const location = useLocation();
@@ -12,15 +14,22 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
+    <HNLayout>
+      <div className="flex flex-col items-center justify-center py-16">
+        <h1 className="text-6xl font-bold text-hn-orange mb-4">404</h1>
+        <p className="text-xl text-hn-title mb-8">Page not found</p>
+        <p className="text-hn-subtext mb-8 max-w-md text-center">
+          The page you are looking for might have been removed, had its name
+          changed, or is temporarily unavailable.
+        </p>
+        <Link
+          to="/"
+          className="px-6 py-2 bg-hn-orange text-white rounded-md hover:bg-opacity-90 transition-all"
+        >
           Return to Home
-        </a>
+        </Link>
       </div>
-    </div>
+    </HNLayout>
   );
 };
 
